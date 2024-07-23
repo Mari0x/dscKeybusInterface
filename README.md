@@ -1,275 +1,279 @@
-# DSC Keybus Interface
+# Interfaz de Keybus DSC
 ![dscKeybusInterface](https://user-images.githubusercontent.com/12835671/105620980-5b356380-5dc8-11eb-93c2-e813751dda8a.png)
-This library directly interfaces Arduino, esp8266, and esp32 series microcontrollers to [DSC PowerSeries](http://www.dsc.com/dsc-security-products/g/PowerSeries/4) and [Classic series](https://www.dsc.com/manual/29000203) security systems for integration with home automation, remote control as a virtual keypad, notifications on alarm events, unlocking installer codes, and emulating DSC panels to use DSC keypads as general purpose input devices.
+Esta biblioteca permite la interfaz directa de microcontroladores de las series Arduino, esp8266 y esp32 con sistemas de seguridad [DSC PowerSeries](http://www.dsc.com/dsc-security-products/g/PowerSeries/4) y [Classic series](https://www.dsc.com/manual/29000203) para la integración con automatización del hogar, control remoto como un teclado virtual, notificaciones de eventos de alarma, desbloqueo de códigos de instalador y emulación de paneles DSC para usar teclados DSC como dispositivos de entrada de propósito general.
 
-This enables existing DSC security system installations to retain the features and reliability of a hardwired system while integrating with modern devices and software for under $5USD in components.
+Esto permite que las instalaciones existentes del sistema de seguridad DSC conserven las características y la confiabilidad de un sistema cableado, mientras se integran con dispositivos y software modernos por menos de $5 USD en componentes.
 
-The built-in examples can be used as-is or as a base to adapt to other uses:
-* Home automation integration: [Home Assistant](https://www.home-assistant.io), [Apple HomeKit & Siri](https://www.apple.com/ios/home/), [Google Home](https://assistant.google.com), [OpenHAB](https://www.openhab.org), [Athom Homey](https://www.athom.com/en/)
-* Remote control: Web interface, [Blynk](https://www.blynk.io) mobile app, [Telegram](https://www.telegram.org) bot (with remote arming/disarming via chat)
-* Notifications: [Pushover](https://www.pushover.net), [PushBullet](https://www.pushbullet.com), [Pushsafer](https://www.pushsafer.com), [Twilio SMS](https://www.twilio.com), [TinyGSM SMS](https://github.com/vshymanskyy/TinyGSM), E-mail
-* Keypad interface: Emulates a DSC panel to connect DSC keypads as physical input devices for any general purpose, without a DSC panel.
-* Installer code unlocking: Automatic code search to unlock panels with unknown installer codes
+Los ejemplos incorporados pueden usarse tal como están o como base para adaptarlos a otros usos:
+* Integración con la automatización del hogar: [Home Assistant](https://www.home-assistant.io), [Apple HomeKit & Siri](https://www.apple.com/ios/home/), [Google Home](https://assistant.google.com), [OpenHAB](https://www.openhab.org), [Athom Homey](https://www.athom.com/en/)
+* Control remoto: Interfaz web, aplicación móvil [Blynk](https://www.blynk.io), bot de [Telegram](https://www.telegram.org) (con armado/desarmado remoto a través del chat)
+* Notificaciones: [Pushover](https://www.pushover.net), [PushBullet](https://www.pushbullet.com), [Pushsafer](https://www.pushsafer.com), [Twilio SMS](https://www.twilio.com), [TinyGSM SMS](https://github.com/vshymanskyy/TinyGSM), correo electrónico
+* Interfaz de teclado: Emula un panel DSC para conectar teclados DSC como dispositivos de entrada física para cualquier propósito general, sin un panel DSC.
+* Desbloqueo de código de instalador: Búsqueda automática de código para desbloquear paneles con códigos de instalador desconocidos
 
-Example integrations:
+Integraciones de ejemplo:
 * [Apple Home & Siri](https://www.apple.com/ios/home/):  
   ![HomeKit](https://user-images.githubusercontent.com/12835671/61570833-c9bb9780-aa54-11e9-9477-8e0853609e91.png)
 * [Home Assistant](https://www.home-assistant.io):  
   ![HomeAssistant](https://user-images.githubusercontent.com/12835671/61985900-38f33780-afd1-11e9-9d43-ab0b681b7b03.png)
 * [OpenHAB](https://www.openhab.org) MQTT:  
   ![OpenHAB](https://user-images.githubusercontent.com/12835671/61560425-daa6e180-aa31-11e9-9efe-0fcb44d2106a.png)
-* [Blynk](https://www.blynk.io) legacy app virtual keypad:
+* Teclado virtual de la aplicación heredada de [Blynk](https://www.blynk.io):  
   ![VirtualKeypad-Blynk](https://user-images.githubusercontent.com/12835671/61568638-9fb0a800-aa49-11e9-94d0-e598431ea2ed.png)
-* Web virtual keypad:  
+* Teclado virtual web:  
   ![VirtualKeypad-Web](https://user-images.githubusercontent.com/12835671/61570049-e43f4200-aa4f-11e9-96bc-3448b6630990.png)
-* [Telegram](https://www.telegram.org) bot:  
+* Bot de [Telegram](https://www.telegram.org):  
   ![Telegram](https://user-images.githubusercontent.com/12835671/102932636-47fc4480-4466-11eb-844b-baa767b92157.png)
 
-## Quick start
-1. Install the DSC Keybus Interface library:
-    * Arduino IDE: Search for `DSC` in the Library Manager - `Sketch > Include Library > Manage Libraries`  
+
+## Inicio rápido
+1. Instala la biblioteca DSC Keybus Interface:
+    * Arduino IDE: Busca `DSC` en el Administrador de Bibliotecas - `Sketch > Include Library > Manage Libraries`  
       ![ArduinoIDE](https://user-images.githubusercontent.com/12835671/41826133-cfa55334-77ec-11e8-8ee1-b482cdb696b2.png)
-    * PlatformIO IDE: Search for `DSC` in the [PlatformIO Library Registry](https://platformio.org/lib/show/5499/dscKeybusInterface)  
+    * PlatformIO IDE: Busca `DSC` en el [Registro de Bibliotecas de PlatformIO](https://platformio.org/lib/show/5499/dscKeybusInterface)  
       ![PlatformIO](https://user-images.githubusercontent.com/12835671/41826138-d5852b62-77ec-11e8-805d-7c861a329e43.png)
     * PlatformIO CLI: `platformio lib install "dscKeybusInterface"`
-    * Alternatively, `git clone` or download the repo .zip to the Arduino/PlatformIO library directory to keep track of the latest changes.
-2. Select, configure, and upload one of the example sketches to the microcontroller:  
+    * Alternativamente, `git clone` o descarga el archivo .zip del repositorio en el directorio de bibliotecas de Arduino/PlatformIO para mantenerte al día con los últimos cambios.
+2. Selecciona, configura y sube uno de los sketches de ejemplo al microcontrolador:  
       ![Examples](https://user-images.githubusercontent.com/12835671/102936214-61ed5580-446d-11eb-9d70-0eae40fe5757.png)
-3. Connect the microcontroller to the DSC Keybus per the wiring diagram with the appropriate resistors (and a transistor if you'd like to control the system).
+3. Conecta el microcontrolador al DSC Keybus según el diagrama de cableado con los resistores apropiados (y un transistor si deseas controlar el sistema).
 
-## Why?
-**I Had**: _A DSC security system not being monitored by a third-party service._  
-**I Wanted**: _Notification if the alarm triggered._
 
-I was interested in finding a solution that directly accessed the pair of data lines that DSC uses for their proprietary Keybus protocol to send data between the panel, keypads, and other modules (instead of using the DSC IT-100 serial module).  Tapping into the data lines is an ideal task for a microcontroller and also presented an opportunity to work with the [Arduino](https://www.arduino.cc) and [FreeRTOS](https://www.freertos.org) (via [esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos)) platforms.
+## ¿Por qué?
+**Tenía**: _Un sistema de seguridad DSC que no estaba siendo monitoreado por un servicio de terceros._  
+**Quería**: _Notificación si la alarma se activaba._
 
-While there has been excellent [discussion about the DSC Keybus protocol](https://www.avrfreaks.net/s/topic/a5C3l000000ULgIEAW/t097136) and several existing projects, there were a few issues that remained unsolved:
-* Error-prone Keybus data capture.
-* Limited data decoding - there was good progress for armed/disarmed states and partial zone status for a single partition, but otherwise most of the data was undecoded (notably missing the alarm triggered state).
-* Read-only - unable to control the Keybus to act as a virtual keypad.
-* No implementations to do useful work with the data.
+Me interesaba encontrar una solución que accediera directamente al par de líneas de datos que DSC usa para su protocolo propietario Keybus para enviar datos entre el panel, los teclados y otros módulos (en lugar de usar el módulo serial DSC IT-100). Interceptar las líneas de datos es una tarea ideal para un microcontrolador y también presentaba una oportunidad para trabajar con las plataformas [Arduino](https://www.arduino.cc) y [FreeRTOS](https://www.freertos.org) (a través de [esp-open-rtos](https://github.com/SuperHouse/esp-open-rtos)).
 
-This library uses a combination of hardware and timer interrupts to accurately capture Keybus data, and has lead to reverse engineering much of the Keybus protocol.
 
-## Features
-* Monitor the status of all partitions:
-  - Alarm triggered, armed/disarmed, entry/exit delay, fire triggered, keypad panic keys
-* Monitor zones status:
-  - Zones open/closed, zones in alarm
-* Monitor system status:
-  - Ready, trouble, AC power, battery
-* Monitor PGM outputs 1-14 status
-* Virtual keypad:
-  - Write keys to the panel for all partitions
-  - Trigger panel command outputs
-* Keypad interface:
-  - Emulates a DSC panel to use DSC PowerSeries and Classic series keypads as physical input devices for any general purpose, without needing a DSC panel.
-* Panel time - retrieve current panel date/time and set a new date/time (including an example with NTP sync)
-* Panel installer code unlocking - determine the 4-digit panel installer code
-* Virtual zone expander - the [expander branch](https://github.com/taligentx/dscKeybusInterface/tree/expander) can emulate a DSC zone expander module to add zones to the security system that are handled by the microcontroller - thanks to [Dilbert66](https://github.com/Dilbert66) for this contribution!
-* Direct Keybus interface:
-  - Does not require the [DSC IT-100 serial interface](https://www.dsc.com/alarm-security-products/IT-100%20-%20PowerSeries%20Integration%20Module/22).
-* Designed for reliable data decoding and performance:
-  - Hardware GPIO pin interrupts and timer interrupts for accurate data capture timing
-  - Data buffering: helps prevent lost Keybus data if the sketch is busy
-  - Extensive data decoding: the majority of Keybus data as seen in the [DSC IT-100 Data Interface developer's guide](https://cms.dsc.com/download.php?t=1&id=16238) has been reverse engineered and documented in [`src/dscKeybusPrintData.cpp`](https://github.com/taligentx/dscKeybusInterface/blob/master/src/dscKeybusPrintData.cpp).
-  - Non-blocking code: Allows sketches to run as quickly as possible without using `delay` or `delayMicroseconds`
-* Supported security systems:
-  - [DSC PowerSeries](https://www.dsc.com/?n=enduser&o=identify) - all panels are supported, tested with: PC585, PC1555MX, PC1565, PC1565-2P, PC5005, PC5010, PC5015, PC5020, PC1616, PC1808, PC1832, PC1864
+Aunque ha habido una excelente [discusión sobre el protocolo DSC Keybus](https://www.avrfreaks.net/s/topic/a5C3l000000ULgIEAW/t097136) y varios proyectos existentes, había algunos problemas que seguían sin resolverse:
+* Captura de datos Keybus propensa a errores.
+* Decodificación de datos limitada: hubo buenos avances para los estados armado/desarmado y estado parcial de zonas para una sola partición, pero la mayoría de los datos no se decodificaban (notablemente faltaba el estado de alarma activada).
+* Solo lectura: no era posible controlar el Keybus para actuar como un teclado virtual.
+* No había implementaciones para hacer un trabajo útil con los datos.
+
+Esta biblioteca utiliza una combinación de hardware e interrupciones de temporizador para capturar datos Keybus con precisión, y ha llevado a la ingeniería inversa de gran parte del protocolo Keybus.
+
+
+## Características
+* Monitoreo del estado de todas las particiones:
+  - Alarma activada, armado/desarmado, retraso de entrada/salida, alarma de incendio, teclas de pánico del teclado
+* Monitoreo del estado de las zonas:
+  - Zonas abiertas/cerradas, zonas en alarma
+* Monitoreo del estado del sistema:
+  - Listo, problema, energía AC, batería
+* Monitoreo del estado de las salidas PGM 1-14
+* Teclado virtual:
+  - Escribir teclas al panel para todas las particiones
+  - Activar salidas de comando del panel
+* Interfaz de teclado:
+  - Emula un panel DSC para usar teclados DSC PowerSeries y Classic series como dispositivos de entrada física para cualquier propósito general, sin necesidad de un panel DSC.
+* Hora del panel - recuperar la fecha/hora actual del panel y establecer una nueva fecha/hora (incluyendo un ejemplo con sincronización NTP)
+* Desbloqueo del código de instalador del panel - determinar el código de instalador de 4 dígitos del panel
+* Expansor de zonas virtual - la [rama expander](https://github.com/taligentx/dscKeybusInterface/tree/expander) puede emular un módulo expansor de zonas DSC para agregar zonas al sistema de seguridad que son manejadas por el microcontrolador - ¡gracias a [Dilbert66](https://github.com/Dilbert66) por esta contribución!
+* Interfaz Keybus directa:
+  - No requiere la [interfaz serial DSC IT-100](https://www.dsc.com/alarm-security-products/IT-100%20-%20PowerSeries%20Integration%20Module/22).
+* Diseñado para una decodificación de datos y rendimiento confiables:
+  - Interrupciones de pines GPIO de hardware e interrupciones de temporizador para una captura precisa de datos
+  - Bufferización de datos: ayuda a prevenir la pérdida de datos Keybus si el sketch está ocupado
+  - Decodificación extensa de datos: la mayoría de los datos Keybus, como se ve en la [guía del desarrollador del Data Interface DSC IT-100](https://cms.dsc.com/download.php?t=1&id=16238), ha sido ingeniería inversa y documentada en [`src/dscKeybusPrintData.cpp`](https://github.com/taligentx/dscKeybusInterface/blob/master/src/dscKeybusPrintData.cpp).
+  - Código no bloqueante: Permite que los sketches se ejecuten lo más rápido posible sin usar `delay` o `delayMicroseconds`
+* Sistemas de seguridad soportados:
+  - [DSC PowerSeries](https://www.dsc.com/?n=enduser&o=identify) - se soportan todos los paneles, probados con: PC585, PC1555MX, PC1565, PC1565-2P, PC5005, PC5010, PC5015, PC5020, PC1616, PC1808, PC1832, PC1864
   - [DSC Classic series](https://www.dsc.com/?n=enduser&o=identify): PC1500, PC1550, PC2550
-    * Requires configuring the panel through `*8` programming to enable PC16-OUT mode - see [DSC Configuration](https://github.com/taligentx/dscKeybusInterface/tree/master?tab=readme-ov-file#dsc-configuration)
-    * PC2500 and PC3000 require testing, [post an issue](https://github.com/taligentx/dscKeybusInterface/issues) if you're able to test these panels.
-  - Rebranded DSC PowerSeries (such as some ADT systems) should also work with this interface.
-* Unsupported security systems:
-  - DSC Alexor (PC9155) is all wireless and does not have an accessible Keybus interface.
-  - DSC Neo series use a higher speed encrypted data protocol (Corbus) that is not currently possible to support.
-  - Other brands (that are not rebranded DSC systems) use different protocols and are not supported.
-    * For Honeywell Ademco Vista 15P/20P, see [Dilbert66's esphome-vistaECP](https://github.com/Dilbert66/esphome-vistaECP) project
-    * For Paradox systems, see [liaan's paradox-esp8266](https://github.com/liaan/paradox_esp8266) project
-* Supported microcontrollers:
+    * Requiere configurar el panel a través de la programación `*8` para habilitar el modo PC16-OUT - consulta [Configuración DSC](https://github.com/taligentx/dscKeybusInterface/tree/master?tab=readme-ov-file#dsc-configuration)
+    * PC2500 y PC3000 requieren prueba, [publica un problema](https://github.com/taligentx/dscKeybusInterface/issues) si puedes probar estos paneles.
+  - Los PowerSeries rebrandados de DSC (como algunos sistemas ADT) también deberían funcionar con esta interfaz.
+* Sistemas de seguridad no soportados:
+  - DSC Alexor (PC9155) es completamente inalámbrico y no tiene una interfaz Keybus accesible.
+  - La serie DSC Neo utiliza un protocolo de datos cifrado de mayor velocidad (Corbus) que no es posible soportar actualmente.
+  - Otras marcas (que no sean sistemas DSC rebrandados) utilizan diferentes protocolos y no son soportadas.
+    * Para Honeywell Ademco Vista 15P/20P, consulta el proyecto [esphome-vistaECP de Dilbert66](https://github.com/Dilbert66/esphome-vistaECP)
+    * Para sistemas Paradox, consulta el proyecto [paradox-esp8266 de liaan](https://github.com/liaan/paradox_esp8266)
+* Microcontroladores soportados:
     - [Arduino](https://www.arduino.cc/en/Main/Products):
-      * Boards: Uno, Mega, Leonardo, Mini, Micro, Nano, Pro, Pro Mini
-      * ATmega328P, ATmega2560, and ATmega32U4-based boards at 16Mhz
+      * Placas: Uno, Mega, Leonardo, Mini, Micro, Nano, Pro, Pro Mini
+      * Placas basadas en ATmega328P, ATmega2560 y ATmega32U4 a 16Mhz
     - esp8266:
-      * Development boards: NodeMCU v2 or v3, Wemos D1 Mini, etc.
-      * Includes [Arduino framework support](https://github.com/esp8266/Arduino) and WiFi for ~$3USD shipped.
+      * Placas de desarrollo: NodeMCU v2 o v3, Wemos D1 Mini, etc.
+      * Incluye [soporte del framework Arduino](https://github.com/esp8266/Arduino) y WiFi por ~$3 USD enviados.
     - esp32, esp32-s2, esp32-s3, esp32-c3:
-      * Includes [Arduino framework support](https://github.com/espressif/arduino-esp32) (v2.0.2 or newer required) for $3-5USD shipped.
-* Possible features (PRs welcome!):
-  - [DSC IT-100](https://cms.dsc.com/download.php?t=1&id=16238) emulation
-  - Unlock 6-digit installer codes
+      * Incluye [soporte del framework Arduino](https://github.com/espressif/arduino-esp32) (se requiere v2.0.2 o más reciente) por $3-5 USD enviados.
+* Características posibles (¡PRs bienvenidos!):
+  - Emulación del [DSC IT-100](https://cms.dsc.com/download.php?t=1&id=16238)
+  - Desbloqueo de códigos de instalador de 6 dígitos
 
-## Release notes
+## Notas de la versión
 * develop
-  - New: Keybus decoding for module programming, PC5200, and zones 33-64 extended status - thanks to [kricon](https://github.com/kricon) for this contribution!
-  - New: Classic series PC3000 support (experimental) - with considerations from the PC3000 code by [sfossen](https://github.com/sfossen). The implementations differ, you can also test his original code which is now preserved in the [pc3000 branch](https://github.com/taligentx/dscKeybusInterface/tree/pc3000).
-  - New: Isolated `KeybusReader`-specific library functions to capture module data and print Keybus data, reduces size and memory usage across all sketches
-  - Updated: `Unlocker` sketch support for DSC Classic series
-  - Updated: `HomeAssistant-MQTT` example configuration for Home Assistant core 2022.06, support changing armed modes while armed, add fire/aux/panic buttons
-  - Updated: `VirtualKeypad-Web` to support ArduinoJSON 7.x, use LittleFS for esp8266
+  - Nuevo: Decodificación Keybus para programación de módulos, PC5200 y estado extendido de zonas 33-64 - ¡gracias a [kricon](https://github.com/kricon) por esta contribución!
+  - Nuevo: Soporte para la serie Classic PC3000 (experimental) - con consideraciones del código PC3000 de [sfossen](https://github.com/sfossen). Las implementaciones difieren, también puedes probar su código original que ahora está preservado en la [rama pc3000](https://github.com/taligentx/dscKeybusInterface/tree/pc3000).
+  - Nuevo: Funciones de biblioteca específicas de `KeybusReader` para capturar datos de módulos e imprimir datos Keybus, reduce el tamaño y el uso de memoria en todos los sketches
+  - Actualizado: Soporte del sketch `Unlocker` para la serie Classic de DSC
+  - Actualizado: Configuración del ejemplo `HomeAssistant-MQTT` para Home Assistant core 2022.06, soporte para cambiar modos armados mientras está armado, agregar botones de incendio/aux/pánico
+  - Actualizado: `VirtualKeypad-Web` para soportar ArduinoJSON 7.x, usar LittleFS para esp8266
 * 3.0
-  - New: DSC Classic series panel support: PC1500, PC1550, PC2550 - thanks to [kricon](https://github.com/kricon) for extensively testing and contributing to this!
-  - New: `KeypadInterface` and `KeypadInterface-MQTT` example sketches - emulate a DSC panel to connect DSC PowerSeries and Classic keypads as physical input devices for any general purpose, without needing a DSC panel.
-  - New: `HomeKit-HomeSpan` example sketch (esp32) - integrate directly with Apple HomeKit as a native standalone accessory using [HomeSpan](https://github.com/HomeSpan/HomeSpan)
-  - New: [Pushover](https://www.pushover.net) and [Pushsafer](https://www.pushsafer.com) push notification example sketches for esp8266/esp32
-  - New: esp32-s2 microcontroller support
-  - New: Code restructured to support new features from sketches using #define flags - enables Classic series support and `KeypadInterface`.
-  - Updated: `Homebridge-MQTT` supports switching armed modes while armed
-  - Updated: Added TLS root certificate to `Twilio-SMS`
-  - Updated: removed deprecated `handlePanel()`
-  - Bugfix: `VirtualKeypad-Web` updated notes to switch to [this fork of ESPAsyncWebServer](https://github.com/arjenhiemstra/ESPAsyncWebServer) to resolve crashes with iOS and macOS clients.
-  - Bugfix: `Pushbullet` example sketch updated TLS security certificate fingerprint
-  - Bugfix: Workaround for [upstream esp32 TLS handshake issue](https://github.com/espressif/arduino-esp32/issues/6165) preventing making a TLS connection more than once.
-  - Bugfix: Fixed `Homebridge-MQTT` handling exit delay states while multiple partitions are arming
-  - Bugfix: Resolved access codes not updating on disarm, changed arming access codes to update before armed status changes
+  - Nuevo: Soporte para paneles de la serie Classic de DSC: PC1500, PC1550, PC2550 - ¡gracias a [kricon](https://github.com/kricon) por probar extensamente y contribuir a esto!
+  - Nuevo: Sketches de ejemplo `KeypadInterface` y `KeypadInterface-MQTT` - emula un panel DSC para conectar teclados DSC PowerSeries y Classic como dispositivos de entrada física para cualquier propósito general, sin necesidad de un panel DSC.
+  - Nuevo: Sketch de ejemplo `HomeKit-HomeSpan` (esp32) - integrar directamente con Apple HomeKit como un accesorio independiente usando [HomeSpan](https://github.com/HomeSpan/HomeSpan)
+  - Nuevo: Sketches de ejemplo de notificaciones push para [Pushover](https://www.pushover.net) y [Pushsafer](https://www.pushsafer.com) para esp8266/esp32
+  - Nuevo: Soporte para el microcontrolador esp32-s2
+  - Nuevo: Código reestructurado para soportar nuevas características desde sketches usando flags #define - habilita soporte para la serie Classic y `KeypadInterface`.
+  - Actualizado: `Homebridge-MQTT` soporta cambiar modos armados mientras está armado
+  - Actualizado: Se añadió el certificado raíz TLS a `Twilio-SMS`
+  - Actualizado: Eliminada la función `handlePanel()` obsoleta
+  - Corrección de errores: Notas actualizadas de `VirtualKeypad-Web` para cambiar a [este fork de ESPAsyncWebServer](https://github.com/arjenhiemstra/ESPAsyncWebServer) para resolver bloqueos con clientes iOS y macOS.
+  - Corrección de errores: Sketch de ejemplo `Pushbullet` actualizado con el huella del certificado de seguridad TLS
+  - Corrección de errores: Solución para [problema de handshake TLS en esp32](https://github.com/espressif/arduino-esp32/issues/6165) que impedía hacer una conexión TLS más de una vez.
+  - Corrección de errores: Se arregló el manejo de `Homebridge-MQTT` para estados de retraso de salida mientras se están armando múltiples particiones
+  - Corrección de errores: Se resolvió el problema de códigos de acceso que no se actualizaban al desarmar, cambiados los códigos de acceso para armar para actualizarse antes de que el estado armado cambie
 * 2.0
-  - New: [Telegram](https://www.telegram.org) bot example sketch
-  - New: [OpenHAB](https://www.openhab.org) integration example sketch using MQTT
-  - New: `Unlocker` example sketch - determines the panel installer code
-  - New: `TimeSyncNTP` example sketch - uses NTP to automatically set the panel time
-  - New: [ESPHome](https://esphome.io) integration example (located in the `extras` directory) - thanks to [Dilbert66](https://github.com/Dilbert66) for this contribution!
-  - New: `TinyGSM-SMS` example sketch - sends status via SMS with a GSM modem - thanks to [jvitkauskas](https://github.com/jvitkauskas) for this contribution!
-  - New: `KeybusReaderIP` example sketch enables Keybus data access over IP, thanks to [aboulfad](https://github.com/aboulfad) for this contribution!
-  - New: esp32 microcontroller support - requires [Arduino-esp32](https://github.com/espressif/arduino-esp32) v1.0.5-rc6 or newer
-  - New: Features for sketches:
-      * `ready` and `disabled` track partition status
-      * `setTime()` sets the panel date and time
-      * `pgmOutputs[]` tracks the status of PGM outputs 1-14
-      * `timestampChanged` tracks when the panel sends a timestamp
-      * `accessCode` tracks the access code used to arm/disarm
-      * `resetStatus()` triggers a full status update of all partitions and zones - for example, after initialization or a lost network connection.
-      * `pauseStatus` pauses status updates if set to `true` - for example, holding status changes during a lost network connection
-      * `stop()` disables the interface - for example, prior to starting OTA updates
-      * `appendPartition()` in example sketches simplifies adding partition numbers to messages
-      * `panelVersion` tracks the panel version number
-  - New: Handle `*1 bypass/re-activate` used to change stay/away mode while armed
-  - Updated: `VirtualKeypad-Blynk` and `VirtualKeypad-Web` display alarm memory, programming zone lights, and event buffer
-  - Updated: `HomeAssistant-MQTT, Homebridge-MQTT, OpenHAB-MQTT` include PGM outputs 1-14 status
-  - Updated: Virtual keypad writes
-      * `write()` for multiple keys can now be set to block until the write is complete with an optional parameter if the char array is ephemeral
-      * Checking `writeReady` is typically no longer needed in the sketch, the library will block if a previous write is in progress - this can be checked if the sketch needs to wait until the library can perform a nonblocking write
-  - Updated: `HomeAssistant-MQTT` sketch now includes night arm and for esp8266/esp32 includes a sensor with partition status messages
-  - Updated: Expanded partition state processing to improve panel state detection at startup
-  - Deprecated: `handlePanel()` is now `loop()`
-  - Bugfix: Resolved keypad aux/panic key, AC power, and battery status on PC585/PC1555MX
-  - Bugfix: Resolved `Homebridge-MQTT` sketch not handling HomeKit target states
-  - Bugfix: Resolved timing issues when consecutively calling `write`
+  - Nuevo: Sketch de ejemplo para bot de [Telegram](https://www.telegram.org)
+  - Nuevo: Sketch de ejemplo para integración con [OpenHAB](https://www.openhab.org) usando MQTT
+  - Nuevo: Sketch de ejemplo `Unlocker` - determina el código de instalador del panel
+  - Nuevo: Sketch de ejemplo `TimeSyncNTP` - usa NTP para establecer automáticamente la hora del panel
+  - Nuevo: Ejemplo de integración con [ESPHome](https://esphome.io) (ubicado en el directorio `extras`) - ¡gracias a [Dilbert66](https://github.com/Dilbert66) por esta contribución!
+  - Nuevo: Sketch de ejemplo `TinyGSM-SMS` - envía el estado por SMS con un módem GSM - ¡gracias a [jvitkauskas](https://github.com/jvitkauskas) por esta contribución!
+  - Nuevo: Sketch de ejemplo `KeybusReaderIP` habilita el acceso a datos Keybus a través de IP, ¡gracias a [aboulfad](https://github.com/aboulfad) por esta contribución!
+  - Nuevo: Soporte para el microcontrolador esp32 - requiere [Arduino-esp32](https://github.com/espressif/arduino-esp32) v1.0.5-rc6 o superior
+  - Nuevo: Características para sketches:
+      * `ready` y `disabled` rastrean el estado de las particiones
+      * `setTime()` establece la fecha y hora del panel
+      * `pgmOutputs[]` rastrea el estado de las salidas PGM 1-14
+      * `timestampChanged` rastrea cuándo el panel envía una marca de tiempo
+      * `accessCode` rastrea el código de acceso utilizado para armar/desarmar
+      * `resetStatus()` desencadena una actualización completa del estado de todas las particiones y zonas - por ejemplo, después de la inicialización o una conexión de red perdida.
+      * `pauseStatus` pausa las actualizaciones de estado si se establece en `true` - por ejemplo, durante una conexión de red perdida
+      * `stop()` desactiva la interfaz - por ejemplo, antes de comenzar las actualizaciones OTA
+      * `appendPartition()` en los sketches de ejemplo simplifica la adición de números de partición a los mensajes
+      * `panelVersion` rastrea el número de versión del panel
+  - Nuevo: Manejo de `*1 bypass/re-activate` usado para cambiar el modo stay/away mientras está armado
+  - Actualizado: `VirtualKeypad-Blynk` y `VirtualKeypad-Web` muestran memoria de alarma, luces de zona de programación y buffer de eventos
+  - Actualizado: `HomeAssistant-MQTT`, `Homebridge-MQTT`, `OpenHAB-MQTT` incluyen el estado de las salidas PGM 1-14
+  - Actualizado: Escrituras en el teclado virtual
+      * `write()` para múltiples teclas ahora se puede configurar para bloquear hasta que la escritura esté completa con un parámetro opcional si el array de caracteres es efímero
+      * Comprobar `writeReady` generalmente ya no es necesario en el sketch, la biblioteca bloqueará si una escritura anterior está en progreso - esto se puede verificar si el sketch necesita esperar hasta que la biblioteca pueda realizar una escritura no bloqueante
+  - Actualizado: Sketch `HomeAssistant-MQTT` ahora incluye armamento nocturno y para esp8266/esp32 incluye un sensor con mensajes de estado de partición
+  - Actualizado: Procesamiento de estado de partición expandido para mejorar la detección del estado del panel al iniciar
+  - Obsoleto: `handlePanel()` ahora es `loop()`
+  - Corrección de errores: Se resolvió el estado de la tecla aux/pánico del teclado, el poder AC y el estado de la batería en PC585/PC1555MX
+  - Corrección de errores: Se resolvió el problema de que el sketch `Homebridge-MQTT` no manejaba los estados objetivo de HomeKit
+  - Corrección de errores: Se resolvieron problemas de sincronización al llamar consecutivamente a `write`
 * 1.2
-  - New: Virtual keypad web interface example, thanks to [Elektrik1](https://github.com/Elektrik1) for this contribution!
-    - As of esp8266 Arduino Core 2.5.1, you may need to [manually update the esp8266FS plugin](https://github.com/esp8266/arduino-esp8266fs-plugin) for SPIFFS upload.
-  - New: Support esp8266 CPU running at 160MHz - this helps sketches using TLS through BearSSL
-  - Updated: HomeAssistant-MQTT example includes availability status, thanks to [bjrolfe](https://github.com/bjrolfe) for this contribution!
-  - Updated: List of tested DSC panels: PC585, PC1565, PC5005, PC1808
-  - Updated: esp8266 power wiring diagrams
-  - Updated: esp8266 module list
+  - Nuevo: Ejemplo de interfaz web de teclado virtual, ¡gracias a [Elektrik1](https://github.com/Elektrik1) por esta contribución!
+    - A partir de esp8266 Arduino Core 2.5.1, es posible que necesites [actualizar manualmente el plugin esp8266FS](https://github.com/esp8266/arduino-esp8266fs-plugin) para la carga de SPIFFS.
+  - Nuevo: Soporte para CPU esp8266 funcionando a 160MHz - esto ayuda a los sketches que usan TLS a través de BearSSL
+  - Actualizado: Ejemplo `HomeAssistant-MQTT` incluye estado de disponibilidad, ¡gracias a [bjrolfe](https://github.com/bjrolfe) por esta contribución!
+  - Actualizado: Lista de paneles DSC probados: PC585, PC1565, PC5005, PC1808
+  - Actualizado: Diagramas de cableado de energía para esp8266
+  - Actualizado: Lista de módulos esp8266
 * 1.1
-  - New: Zones 33-64 tamper and fault decoding
-  - New: Push notification example using [Twilio](https://www.twilio.com), thanks to [ColingNG](https://github.com/ColinNg) for this contribution!
-  - Bugfix: Zones 17-32 status incorrectly stored
+  - Nuevo: Decodificación de manipulación y falla de zonas 33-64
+  - Nuevo: Ejemplo de notificación push usando [Twilio](https://www.twilio.com), ¡gracias a [ColingNG](https://github.com/ColinNg) por esta contribución!
+  - Corrección de errores: Estado incorrecto de las zonas 17-32 almacenado
 * 1.0
-  - New: [Blynk](https://www.blynk.io) virtual keypad example sketch and app layout examples
-  - New: Virtual keypad support for PGM terminals 1-4 command output
-  - New: Status `keybusConnected` to check if data is being received from the DSC panel
-  - New: Auxiliary input alarm decoding
+  - Nuevo: Ejemplo de teclado virtual [Blynk](https://www.blynk.io) y ejemplos de diseño de aplicación
+  - Nuevo: Soporte para teclado virtual en salidas de comando de terminales PGM 1-4
+  - Nuevo: Estado `keybusConnected` para verificar si se están recibiendo datos del panel DSC
+  - Nuevo: Decodificación de alarmas de entrada auxiliar
 * 0.4
-  - New: Virtual keypad support for partitions 3-8, thanks to [jvitkauskas](https://github.com/jvitkauskas) for contributing the necessary logs
-  - New: Support ATmega32U4-based Arduino boards (switched to AVR Timer1)
-  - Changed: Simplified example names, configurations, added version numbers
-  - Bugfix: Virtual keypad writes with partitions 5-8 enabled
-  - Bugfix: F/A/P alarm key writes with `processModuleData` disabled
-  - Bugfix: HomeAssistant example `configuration.yaml` error for `alarm_control_panel`
+  - Nuevo: Soporte para teclado virtual en particiones 3-8, gracias a [jvitkauskas](https://github.com/jvitkauskas) por contribuir con los registros necesarios
+  - Nuevo: Soporte para placas Arduino basadas en ATmega32U4 (cambio a Timer1 de AVR)
+  - Cambiado: Nombres de ejemplos simplificados, configuraciones, números de versión añadidos
+  - Corrección de errores: Escrituras en teclado virtual con particiones 5-8 habilitadas
+  - Corrección de errores: Escrituras de teclas F/A/P con `processModuleData` desactivado
+  - Corrección de errores: Error en `configuration.yaml` del ejemplo de HomeAssistant para `alarm_control_panel`
 * 0.3
-  - New: Status for partitions 2-8, zones 33-64
-  - New: Virtual keypad support for partition 2
-  - New: [Athom Homey](https://www.athom.com/en/) integration example sketch, thanks to [MagnusPer](https://github.com/MagnusPer) for this contribution!
-  - New: PCB layouts, contributed by [sjlouw](https://github.com/sj-louw)
-  - New: Configurable number of partitions and zones to customize memory usage: `dscPartitions` and `dscZones` in `dscKeybusInterface.h`
-  - New: KeybusReader decoding of commands `0xE6` and `0xEB`
-  - Changed: Split examples by platform
-  - Changed: Arduino sketches no longer use pin 4 to avoid a conflict with the SD card on Ethernet shields.
-  - Changed: MQTT examples updated with username and password fields
-  - Changed: `processRedundantData` now true by default to prevent storing repetitive data, reduces memory usage.
-  - Note: This release changes the library methods to accommodate multiple partitions, existing sketches will need to be updated to match the new example sketches.
+  - Nuevo: Estado para particiones 2-8, zonas 33-64
+  - Nuevo: Soporte para teclado virtual en partición 2
+  - Nuevo: Ejemplo de integración con [Athom Homey](https://www.athom.com/en/), gracias a [MagnusPer](https://github.com/MagnusPer) por esta contribución
+  - Nuevo: Disposición de PCB, contribuida por [sjlouw](https://github.com/sj-louw)
+  - Nuevo: Número configurable de particiones y zonas para personalizar el uso de memoria: `dscPartitions` y `dscZones` en `dscKeybusInterface.h`
+  - Nuevo: Decodificación de comandos `0xE6` y `0xEB` en KeybusReader
+  - Cambiado: Ejemplos divididos por plataforma
+  - Cambiado: Los sketches de Arduino ya no usan el pin 4 para evitar conflictos con la tarjeta SD en shields Ethernet.
+  - Cambiado: Ejemplos MQTT actualizados con campos de nombre de usuario y contraseña
+  - Cambiado: `processRedundantData` ahora es verdadero por defecto para evitar almacenar datos repetitivos, reduce el uso de memoria.
+  - Nota: Esta versión cambia los métodos de la biblioteca para acomodar múltiples particiones, los sketches existentes necesitarán ser actualizados para coincidir con los nuevos ejemplos.
 * 0.2
-  - New: Status for zones 9-32
-  - New: [Home Assistant](https://www.home-assistant.io) integration example sketch
-  - New: Panel data buffering, adds `dscBufferSize` to `dscKeybusInterface.h` to allow configuration of how many panel commands are buffered to customize memory usage (uses 18 bytes of memory per command buffered).
-* 0.1 - Initial release
-
+  - Nuevo: Estado para zonas 9-32
+  - Nuevo: Ejemplo de integración con [Home Assistant](https://www.home-assistant.io)
+  - Nuevo: Bufferización de datos del panel, añade `dscBufferSize` a `dscKeybusInterface.h` para permitir la configuración del número de comandos del panel que se almacenan en buffer para personalizar el uso de memoria (usa 18 bytes de memoria por comando almacenado en buffer).
+* 0.1 - Lanzamiento inicial
 ## Examples
-The included examples demonstrate how to use the library and can be used as-is or adapted to integrate with other software.  Post an issue/pull request if you've developed (and would like to share) a sketch/integration that others can use.
 
-* **Status**: Processes and prints the security system status to a serial interface, including reading from serial for the virtual keypad.  This demonstrates how to determine if the security system status has changed, what has changed, and how to take action based on those changes.  Post an issue/pull request if you have a use for additional system states - for now, only a subset of all decoded commands are being tracked for status to limit memory usage:
-  * Partitions ready
-  * Partitions armed away/stay/disarmed
-  * Partitions in alarm
-  * Partitions exit delay in progress
-  * Partitions entry delay in progress
-  * Partitions fire alarm
-  * Zones open/closed
-  * Zones in alarm
-  * PGM outputs 1-14
-  * Keypad fire/auxiliary/panic alarm
-  * Get/set panel date and time
-  * User access code number (1-40)
-  * Panel AC power
-  * Panel battery
-  * Panel trouble
-  * Keybus connected
+Los ejemplos incluidos demuestran cómo utilizar la biblioteca y se pueden usar tal cual o adaptar para integrarse con otros softwares. Publica un problema/pull request si has desarrollado (y te gustaría compartir) un sketch/integración que otros puedan usar.
 
-* **HomeKit-HomeSpan** (esp32): Integrates directly with Apple HomeKit as a native accessory (for the Home app and Siri) using [HomeSpan](https://github.com/HomeSpan/HomeSpan), without needing a separate service or device.  Demonstrates arming/disarming partitions, zones status, fire alarms, PGM outputs status, and controlling panel command outputs.
-    - For esp8266, the [dscKeybusInterface-RTOS](https://github.com/taligentx/dscKeybusInterface-RTOS) library includes a native HomeKit implementation that runs directly on the esp8266, without requiring a separate device running MQTT or Homebridge.
+* **Status**: Procesa e imprime el estado del sistema de seguridad en una interfaz serial, incluyendo la lectura de datos del teclado virtual. Esto demuestra cómo determinar si el estado del sistema ha cambiado, qué ha cambiado y cómo tomar acción en base a esos cambios. Actualmente, solo se rastrea un subconjunto de todos los comandos decodificados para limitar el uso de memoria:
+  * Particiones listas
+  * Particiones armadas en modo away/stay/desarmado
+  * Particiones en alarma
+  * Retraso de salida en particiones en progreso
+  * Retraso de entrada en particiones en progreso
+  * Alarma de incendio en particiones
+  * Zonas abiertas/cerradas
+  * Zonas en alarma
+  * Salidas PGM 1-14
+  * Alarma de incendio/auxiliar/pánico en el teclado
+  * Obtener/establecer la fecha y hora del panel
+  * Número de código de acceso de usuario (1-40)
+  * Energía AC del panel
+  * Batería del panel
+  * Problema del panel
+  * Keybus conectado
 
-* **Homebridge-MQTT**: Interfaces with [Homebridge](https://github.com/nfarina/homebridge) via MQTT to integrate with Apple HomeKit (including the iOS Home app and Siri) and [Google Home](https://github.com/oznu/homebridge-gsh).  Demonstrates arming/disarming partitions and for HomeKit, viewing the status of zones, PGM outputs, and fire alarms.
+* **HomeKit-HomeSpan** (esp32): Se integra directamente con Apple HomeKit como un accesorio nativo (para la app Home y Siri) usando [HomeSpan](https://github.com/HomeSpan/HomeSpan), sin necesidad de un servicio o dispositivo adicional. Demuestra el armado/desarmado de particiones, estado de zonas, alarmas de incendio, estado de salidas PGM y control de salidas de comandos del panel.
+  - Para esp8266, la biblioteca [dscKeybusInterface-RTOS](https://github.com/taligentx/dscKeybusInterface-RTOS) incluye una implementación nativa de HomeKit que se ejecuta directamente en esp8266, sin requerir un dispositivo adicional que ejecute MQTT o Homebridge.
 
-* **HomeAssistant-MQTT**: Interfaces with [Home Assistant](https://www.home-assistant.io) via MQTT.  Demonstrates arming/disarming partitions and viewing the status of zones, PGM outputs, fire alarms, and trouble.  For esp8266/esp32, the partition status is available as a text message for display.
+* **Homebridge-MQTT**: Interfaz con [Homebridge](https://github.com/nfarina/homebridge) a través de MQTT para integrarse con Apple HomeKit (incluyendo la app iOS Home y Siri) y [Google Home](https://github.com/oznu/homebridge-gsh). Demuestra el armado/desarmado de particiones y, para HomeKit, la visualización del estado de zonas, salidas PGM y alarmas de incendio.
 
-* **OpenHAB-MQTT**: Interfaces with [OpenHAB](https://www.openhab.org) via MQTT.  Demonstrates using the panel and partitions states as OpenHAB switches and zone states as OpenHAB contacts.  For esp8266/esp32, a panel status message is also sent as a string to OpenHAB.  See https://github.com/jimtng/dscalarm-mqtt for an integration using the Homie convention for OpenHAB's Homie MQTT component.
+* **HomeAssistant-MQTT**: Interfaz con [Home Assistant](https://www.home-assistant.io) a través de MQTT. Demuestra el armado/desarmado de particiones y la visualización del estado de zonas, salidas PGM, alarmas de incendio y problemas. Para esp8266/esp32, el estado de particiones está disponible como un mensaje de texto para su visualización.
 
-* **ESPHome** (esp8266): Integrates with [ESPHome](https://esphome.io) as a custom component - note that this example is located in the `extras` directory.  Thanks to [Dilbert66](https://github.com/Dilbert66) for this contribution!
+* **OpenHAB-MQTT**: Interfaz con [OpenHAB](https://www.openhab.org) a través de MQTT. Demuestra el uso de los estados del panel y particiones como interruptores de OpenHAB y los estados de zonas como contactos de OpenHAB. Para esp8266/esp32, también se envía un mensaje de estado del panel como una cadena a OpenHAB. Consulta https://github.com/jimtng/dscalarm-mqtt para una integración usando la convención Homie para el componente Homie MQTT de OpenHAB.
 
-* **Homey**: Integrates with [Athom Homey](https://www.athom.com/en/) and the [Homeyduino](https://github.com/athombv/homey-arduino-library/) library, including armed, alarm, and fire states (currently limited to one partition), and zone states.  Thanks to [MagnusPer](https://github.com/MagnusPer) for contributing this example!
+* **ESPHome** (esp8266): Se integra con [ESPHome](https://esphome.io) como un componente personalizado - ten en cuenta que este ejemplo está ubicado en el directorio `extras`. ¡Gracias a [Dilbert66](https://github.com/Dilbert66) por esta contribución!
 
-* **Telegram** (esp8266/esp32):  Demonstrates sending status updates as push notifications and arming/disarming the security system via a [Telegram](https://www.telegram.org) bot.  Supports iOS, Android, and macOS/Windows/Linux desktop notifications (free).
+* **Homey**: Se integra con [Athom Homey](https://www.athom.com/en/) y la biblioteca [Homeyduino](https://github.com/athombv/homey-arduino-library/), incluyendo estados armados, alarmas y fuego (actualmente limitado a una partición), y estados de zonas. ¡Gracias a [MagnusPer](https://github.com/MagnusPer) por contribuir con este ejemplo!
 
-* **Pushover** (esp8266/esp32):  Demonstrates sending status updates as push notifications via [Pushover](https://www.pushover.net).  Supports iOS, Android, macOS native desktop notifications, and Chrome/Firefox/Safari browser popups ($4.99USD one-time purchase per client platform).
+* **Telegram** (esp8266/esp32): Demuestra el envío de actualizaciones de estado como notificaciones push y el armado/desarmado del sistema de seguridad a través de un [Telegram](https://www.telegram.org) bot. Soporta notificaciones en iOS, Android y escritorios macOS/Windows/Linux (gratuito).
 
-* **Pushbullet** (esp8266/esp32):  Demonstrates sending status updates as push notifications via [Pushbullet](https://www.pushbullet.com).  Supports Android, Windows desktop notifications, and Chrome/Firefox browser popups (free).  Note that iOS is no longer supported.
+* **Pushover** (esp8266/esp32): Demuestra el envío de actualizaciones de estado como notificaciones push a través de [Pushover](https://www.pushover.net). Soporta notificaciones en iOS, Android, escritorios macOS nativos y ventanas emergentes en navegadores Chrome/Firefox/Safari (4.99USD una sola vez por cliente).
 
-* **Pushsafer** (esp8266/esp32):  Demonstrates sending status updates as push notifications via [Pushsafer](https://www.pushsafer.com).  Supports iOS, Android, Windows desktop notifications, and Chrome/Firefox/Edge/Opera/Yandex browser popups (€0.99EUR or less per 1000 notifications).
+* **Pushbullet** (esp8266/esp32): Demuestra el envío de actualizaciones de estado como notificaciones push a través de [Pushbullet](https://www.pushbullet.com). Soporta notificaciones en Android, Windows y ventanas emergentes en navegadores Chrome/Firefox (gratuito). Ten en cuenta que iOS ya no es compatible.
 
-* **Twilio-SMS** (esp8266/esp32): Demonstrates sending status updates as SMS text messages via [Twilio](https://www.twilio.com) - thanks to [ColingNG](https://github.com/ColinNg) for contributing this example!
+* **Pushsafer** (esp8266/esp32): Demuestra el envío de actualizaciones de estado como notificaciones push a través de [Pushsafer](https://www.pushsafer.com). Soporta notificaciones en iOS, Android, escritorios Windows y ventanas emergentes en navegadores Chrome/Firefox/Edge/Opera/Yandex (0.99EUR o menos por 1000 notificaciones).
 
-* **Email** (esp8266/esp32): Demonstrates sending status updates as email.  Email is sent using SMTPS (port 465) with SSL for encryption - this is necessary on the esp8266/esp32 until STARTTLS can be supported.  For example, this will work with Gmail after changing the account settings to [allow less secure apps](https://support.google.com/accounts/answer/6010255).
+* **Twilio-SMS** (esp8266/esp32): Demuestra el envío de actualizaciones de estado como mensajes de texto SMS a través de [Twilio](https://www.twilio.com) - ¡gracias a [ColingNG](https://github.com/ColinNg) por contribuir con este ejemplo!
 
-  This can be used to send SMS text messages if the number's service provider has an [email to SMS gateway](https://en.wikipedia.org/wiki/SMS_gateway#Email_clients) - examples for the US:
+* **Email** (esp8266/esp32): Demuestra el envío de actualizaciones de estado por correo electrónico. El correo se envía usando SMTPS (puerto 465) con SSL para cifrado - esto es necesario en esp8266/esp32 hasta que STARTTLS pueda ser compatible. Por ejemplo, esto funcionará con Gmail después de cambiar la configuración de la cuenta para [permitir aplicaciones menos seguras](https://support.google.com/accounts/answer/6010255).
+
+  Esto se puede usar para enviar mensajes de texto SMS si el proveedor de servicios del número tiene una [puerta de enlace de correo a SMS](https://en.wikipedia.org/wiki/SMS_gateway#Email_clients) - ejemplos para EE. UU.:
   * T-mobile: 5558675309@tmomail.net
   * Verizon: 5558675309@vtext.com
   * AT&T: 5558675309@txt.att.net
 
-* **VirtualKeypad-Web** (esp8266/esp32): Provides a virtual keypad web interface, using the esp8266/esp32 itself as a standalone web server, including viewing alarm memory, programming zone lights, and the event buffer.  Thanks to [Elektrik1](https://github.com/Elektrik1) for contributing this example!
+* **VirtualKeypad-Web** (esp8266/esp32): Proporciona una interfaz web de teclado virtual, usando el esp8266/esp32 como un servidor web independiente, incluyendo la visualización de memoria de alarmas, luces de zonas de programación y el buffer de eventos. ¡Gracias a [Elektrik1](https://github.com/Elektrik1) por contribuir con este ejemplo!
 
-* **VirtualKeypad-Blynk** (esp8266/esp32): Provides a virtual keypad interface for the free [Blynk legacy app](https://blynk.io/blog/what-will-happen-to-the-legacy-blynk-platform) on iOS and Android, including viewing alarm memory, programming zone lights, and the event buffer.  This uses a [local Blynk server](https://github.com/Peterkn2001/blynk-server) and does not require cloud services or subscriptions. Scan one of the following QR codes from within the Blynk legacy app for an example keypad layout:
-  - [Virtual keypad with 16 zones](https://user-images.githubusercontent.com/12835671/103719316-5f6f1d80-4f8e-11eb-8a7c-4bd7bfe3cd8a.png)
-  - [Virtual keypad with 32 zones](https://user-images.githubusercontent.com/12835671/103719459-af4de480-4f8e-11eb-8e4a-7172961e2d29.png)
-  - [Virtual keypad with 8 zones and event log](https://user-images.githubusercontent.com/12835671/103719518-cc82b300-4f8e-11eb-8b2a-97299e7be3a2.png)
+* **VirtualKeypad-Blynk** (esp8266/esp32): Proporciona una interfaz de teclado virtual para la aplicación [Blynk legacy](https://blynk.io/blog/what-will-happen-to-the-legacy-blynk-platform) gratuita en iOS y Android, incluyendo la visualización de memoria de alarmas, luces de zonas de programación y el buffer de eventos. Esto usa un [servidor Blynk local](https://github.com/Peterkn2001/blynk-server) y no requiere servicios o suscripciones en la nube. Escanea uno de los siguientes códigos QR desde la aplicación Blynk legacy para ver un diseño de teclado de ejemplo:
+  - [Teclado virtual con 16 zonas](https://user-images.githubusercontent.com/12835671/103719316-5f6f1d80-4f8e-11eb-8a7c-4bd7bfe3cd8a.png)
+  - [Teclado virtual con 32 zonas](https://user-images.githubusercontent.com/12835671/103719459-af4de480-4f8e-11eb-8e4a-7172961e2d29.png)
+  - [Teclado virtual con 8 zonas y registro de eventos](https://user-images.githubusercontent.com/12835671/103719518-cc82b300-4f8e-11eb-8b2a-97299e7be3a2.png)
 
-  The current Blynk IoT app is not supported - this new platform is cloud-only and has pricing tiers based on the number of data elements in the interface. The virtual keypad uses up to 124 elements and would require the [Pro pricing plan](https://blynk.io/pricing) at an unreasonable $99USD/monthly.
+  La actual aplicación Blynk IoT no es compatible - esta nueva plataforma es solo en la nube y tiene planes de precios basados en el número de elementos de datos en la interfaz. El teclado virtual usa hasta 124 elementos y requeriría el [plan de precios Pro](https://blynk.io/pricing) a un costo elevado de $99USD/mes.
 
-* **TimeSyncNTP**:  Synchronizes and maintains time on PowerSeries panels via an NTP server, including DST adjustments.
+* **TimeSyncNTP**: Sincroniza y mantiene el tiempo en los paneles PowerSeries a través de un servidor NTP, incluyendo ajustes de DST.
 
-* **Unlocker**: Finds the 4-digit installer code for PowerSeries and Classic panels by checking all possible codes, including handling keypad lockout if enabled.  The valid code is output to serial as well as repeatedly flashed with the built-in LED.  Arduino checks each code sequentially but esp8266/esp32 may find the code more quickly as they check in order of the [most commonly used general 4-digit codes](http://www.datagenetics.com/blog/september32012).
+* **Unlocker**: Encuentra el código de instalador de 4 dígitos para los paneles PowerSeries y Classic probando todos los códigos posibles, incluyendo el manejo del bloqueo del teclado si está habilitado. El código válido se muestra en el serial y también se parpadea repetidamente con el LED incorporado. Arduino revisa cada código secuencialmente, pero esp8266/esp32 puede encontrar el código más rápidamente ya que revisa en el orden de los [códigos de 4 dígitos más comúnmente usados](http://www.datagenetics.com/blog/september32012).
 
-* **KeypadInterface**:  Interfaces directly to DSC PowerSeries and Classic series (tested with PC1500RK) keypads (without a DSC panel) to enable using these as physical inputs for any general purpose.  Examples included for interfacing via serial and MQTT.  Note that this uses a different wiring setup from the standard Keybus interface, refer to the wiring diagram in the example sketch.
+* **KeypadInterface**: Interfaz directa con teclados DSC PowerSeries y Classic (probado con PC1500RK) (sin un panel DSC) para usar estos como entradas físicas para cualquier propósito general. Ejemplos incluidos para la interfaz a través de serial y MQTT. Nota: Esto usa una configuración de cableado diferente de la interfaz Keybus estándar, consulta el diagrama de cableado en el sketch de ejemplo.
 
-* **KeybusReader**: Decodes and prints data from the Keybus to a serial interface, including reading from serial for the virtual keypad.  This can be used to help decode the Keybus protocol and is also handy as a troubleshooting tool to verify that data is displayed without errors.  For esp8266/esp32, `KeybusReaderIP` enables connectivity over WiFi.
+* **KeybusReader**: Decodifica e imprime datos del Keybus en una interfaz serial, incluyendo la lectura del teclado virtual desde el serial. Esto puede ayudar a decodificar el protocolo Keybus y también es útil como herramienta de resolución de problemas para verificar que los datos se muestren sin errores. Para esp8266/esp32, `KeybusReaderIP` habilita la conectividad a través de WiFi.
 
-  See [`src/dscKeybusPrintData.cpp`](https://github.com/taligentx/dscKeybusInterface/blob/master/src/dscKeybusPrintData.cpp) for all currently known Keybus protocol commands and messages.  Issues and pull requests with additions/corrections are welcome!
+  Consulta [`src/dscKeybusPrintData.cpp`](https://github.com/taligentx/dscKeybusInterface/blob/master/src/dscKeybusPrintData.cpp) para todos los comandos y mensajes del protocolo Keybus actualmente conocidos. ¡Se aceptan problemas y pull requests con adiciones/correcciones!
 
-## More DSC projects
-* **[dscalarm-mqtt](https://github.com/jimtng/dscalarm-mqtt)**: implementation of the [Homie](https://homieiot.github.io) MQTT convention
-* **[esphome-dsckeybus](https://github.com/Dilbert66/esphome-dsckeybus)**: implementation of this library as an ESPHome custom component
-* **[PC1500KeybusReader](https://github.com/polishedmarvin/dscKeybusInterface)**: MQTT HomeKit example for the PC1500 and ESP32 using [dougkpowers/pc1550-interface](https://github.com/dougkpowers/pc1550-interface)
+## Más proyectos DSC
+* **[dscalarm-mqtt](https://github.com/jimtng/dscalarm-mqtt)**: implementación de la convención MQTT [Homie](https://homieiot.github.io)
+* **[esphome-dsckeybus](https://github.com/Dilbert66/esphome-dsckeybus)**: implementación de esta biblioteca como un componente personalizado de ESPHome
+* **[PC1500KeybusReader](https://github.com/polishedmarvin/dscKeybusInterface)**: Ejemplo de MQTT HomeKit para el PC1500 y ESP32 usando [dougkpowers/pc1550-interface](https://github.com/dougkpowers/pc1550-interface)
 
 ## Wiring
 
